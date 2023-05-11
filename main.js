@@ -4,7 +4,8 @@ import { DragControls } from 'three/addons/controls/DragControls.js';
 let camera, scene, renderer;
 let controls;
 
-const objects = [];
+const nodes = [];
+const edges = [];
 const NUMBER_OF_BEZIER_LINES = 50;
 
 init();
@@ -26,7 +27,7 @@ function init() {
 
   // Scene
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xffffff);
+  scene.background = new THREE.Color(0xdee2e6);
 
   // Renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -34,7 +35,8 @@ function init() {
   renderer.setSize(width, height);
   document.body.appendChild(renderer.domElement);
 
-  renderBeziers(NUMBER_OF_BEZIER_LINES);
+  // renderBeziers(NUMBER_OF_BEZIER_LINES);
+  renderTwoNodes();
 
   render();
 }
@@ -73,10 +75,34 @@ function renderBeziers(count) {
     // Create the mesh and add it to the scene
     const mesh = new THREE.Line(geometry, material);
     scene.add(mesh);
-    objects.push(mesh);
+    edges.push(mesh);
   }
 
-  controls = new DragControls([...objects], camera, renderer.domElement);
+  controls = new DragControls([...edges], camera, renderer.domElement);
+  controls.addEventListener('drag', render);
+}
+
+function renderTwoNodes() {
+  const color = 0xadb5bd;
+  // Create the materials
+  const material1 = new THREE.MeshBasicMaterial({ color });
+  const material2 = new THREE.MeshBasicMaterial({ color });
+
+  // Create the geometries
+  const geometry1 = new THREE.PlaneGeometry(30, 10);
+  const geometry2 = new THREE.PlaneGeometry(30, 10);
+
+  // Create the meshes and position them
+  const mesh1 = new THREE.Mesh(geometry1, material1);
+  mesh1.position.set(-15, 25, 0);
+  const mesh2 = new THREE.Mesh(geometry2, material2);
+  mesh2.position.set(-15, 0, 0);
+
+  // Add the meshes to the scene
+  scene.add(mesh1);
+  scene.add(mesh2);
+  nodes.push(mesh1, mesh2);
+  controls = new DragControls([...nodes], camera, renderer.domElement);
   controls.addEventListener('drag', render);
 }
 

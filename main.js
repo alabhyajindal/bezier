@@ -1,4 +1,13 @@
 import * as THREE from 'three';
+import { DragControls } from 'three/addons/controls/DragControls.js';
+
+let camera, scene, renderer;
+let controls;
+
+const objects = [];
+const NUMBER_OF_BEZIER_LINES = 50;
+
+init();
 
 function init() {
   // Camera
@@ -6,7 +15,7 @@ function init() {
   const height = window.innerHeight;
   const near_plane = 2;
   const far_plane = 100;
-  const camera = new THREE.PerspectiveCamera(
+  camera = new THREE.PerspectiveCamera(
     40,
     width / height,
     near_plane,
@@ -16,21 +25,21 @@ function init() {
   camera.lookAt(new THREE.Vector3(0, 0, 0));
 
   // Scene
-  const scene = new THREE.Scene();
+  scene = new THREE.Scene();
   scene.background = new THREE.Color(0xffffff);
 
   // Renderer
-  let renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(width, height);
   document.body.appendChild(renderer.domElement);
 
-  renderBeziers(scene, 20);
+  renderBeziers(NUMBER_OF_BEZIER_LINES);
 
-  renderer.render(scene, camera);
+  render();
 }
 
-function renderBeziers(scene, count) {
+function renderBeziers(count) {
   // Define the control points
   const startPoint = new THREE.Vector3(-10, 0, 0);
   const endPoint = new THREE.Vector3(10, 0, 0);
@@ -64,7 +73,13 @@ function renderBeziers(scene, count) {
     // Create the mesh and add it to the scene
     const mesh = new THREE.Line(geometry, material);
     scene.add(mesh);
+    objects.push(mesh);
   }
+
+  controls = new DragControls([...objects], camera, renderer.domElement);
+  controls.addEventListener('drag', render);
 }
 
-init();
+function render() {
+  renderer.render(scene, camera);
+}

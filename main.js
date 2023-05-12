@@ -119,7 +119,11 @@ function renderNodes(count) {
 function onKeyDown(event) {
   enableSelection = event.key === 'Shift' ? true : false;
   if (!event.ctrlKey && event.key === 'r') {
-    randomlyGroupObjects(25);
+    const count = Number(
+      document.getElementById('controls-object-count').value
+    );
+    console.log(typeof count);
+    randomlyGroupObjects(count);
     render();
   }
 }

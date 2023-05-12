@@ -21,3 +21,11 @@ body {
 #usage-action {
   color: #7700ff;
 }
+
+#controls {
+  margin-top: 1rem;
+}
+
+#controls-object-count {
+  margin-top: 0.5rem;
+}

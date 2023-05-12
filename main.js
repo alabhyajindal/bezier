@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 
+const canvas = document.querySelector('#c');
 let camera, scene, renderer;
 let controls, group;
-let maxX, maxY;
 
 let enableSelection = false;
 
@@ -36,7 +36,7 @@ function init() {
   scene.background = new THREE.Color(0xf1f3f5);
 
   // Renderer
-  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(width, height);
   document.body.appendChild(renderer.domElement);

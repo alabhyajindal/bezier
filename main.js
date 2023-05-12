@@ -3,12 +3,13 @@ import { DragControls } from 'three/addons/controls/DragControls.js';
 
 let camera, scene, renderer;
 let controls, group;
+let maxX, maxY;
 
 let enableSelection = false;
 
 const objects = [];
 const NUMBER_OF_BEZIER_LINES = 50;
-const NUMBER_OF_NODES = 30;
+const NUMBER_OF_NODES = 50;
 
 const mouse = new THREE.Vector2(),
   raycaster = new THREE.Raycaster();
@@ -32,7 +33,7 @@ function init() {
 
   // Scene
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xdee2e6);
+  scene.background = new THREE.Color(0xf1f3f5);
 
   // Renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -44,7 +45,7 @@ function init() {
   scene.add(group);
 
   // Calling rendering functions
-  renderBeziers(NUMBER_OF_BEZIER_LINES);
+  // renderBeziers(NUMBER_OF_BEZIER_LINES);
   renderNodes(NUMBER_OF_NODES);
 
   controls = new DragControls([...objects], camera, renderer.domElement);
@@ -98,8 +99,6 @@ function renderBeziers(count) {
 
 function renderNodes(count) {
   const color = 0xadb5bd;
-
-  // Create the geometries
   const geometry = new THREE.PlaneGeometry(20, 5);
 
   for (let i = 0; i < count; i++) {
@@ -117,7 +116,7 @@ function renderNodes(count) {
 }
 
 function onKeyDown(event) {
-  enableSelection = event.keyCode === 16 ? true : false;
+  enableSelection = event.key === 'Shift' ? true : false;
 }
 
 function onKeyUp() {

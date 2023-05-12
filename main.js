@@ -21,7 +21,7 @@ function init() {
   const width = window.innerWidth;
   const height = window.innerHeight;
   const near_plane = 2;
-  const far_plane = 100;
+  const far_plane = 150;
   camera = new THREE.PerspectiveCamera(
     40,
     width / height,
@@ -105,6 +105,7 @@ function renderNodes(count) {
     const material = new THREE.MeshBasicMaterial({ color });
     const x = randomIntFromInterval(-50, 50);
     const y = randomIntFromInterval(-50, 50);
+
     const z = 0;
 
     const mesh = new THREE.Mesh(geometry, material);
@@ -117,6 +118,10 @@ function renderNodes(count) {
 
 function onKeyDown(event) {
   enableSelection = event.key === 'Shift' ? true : false;
+  if (!event.ctrlKey && event.key === 'r') {
+    randomlyGroupObjects(25);
+    render();
+  }
 }
 
 function onKeyUp() {
@@ -160,6 +165,25 @@ function onClick(event) {
   }
 
   render();
+}
+
+function randomlyGroupObjects(count) {
+  const draggableObjects = controls.getObjects();
+  draggableObjects.length = 0;
+
+  const selectedObjects = objects
+    .filter((object) => {
+      return object;
+    })
+    .splice(0, count);
+
+  selectedObjects.forEach((object) => {
+    object.material.color.set(0x7700ff);
+    object.position.z = 1;
+    group.attach(object);
+  });
+  controls.transformGroup = true;
+  draggableObjects.push(group);
 }
 
 function randomIntFromInterval(min, max) {

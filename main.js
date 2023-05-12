@@ -103,8 +103,8 @@ function renderNodes(count) {
 
   for (let i = 0; i < count; i++) {
     const material = new THREE.MeshBasicMaterial({ color });
-    const x = Math.floor(Math.random() * 100);
-    const y = Math.floor(Math.random() * 100);
+    const x = randomIntFromInterval(-50, 50);
+    const y = randomIntFromInterval(-50, 50);
     const z = 0;
 
     const mesh = new THREE.Mesh(geometry, material);
@@ -145,6 +145,7 @@ function onClick(event) {
         scene.attach(object);
       } else {
         object.material.color.set(0x7700ff);
+        object.position.z = 1;
         group.attach(object);
       }
 
@@ -159,6 +160,11 @@ function onClick(event) {
   }
 
   render();
+}
+
+function randomIntFromInterval(min, max) {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 function render() {

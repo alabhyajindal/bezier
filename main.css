@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+#usage-cont {
+  position: absolute;
+  right: 0;
+  margin: 1rem;
+}
+
+#usage-header {
+  margin-bottom: 10px;
+}
+
+#usage-action {
+  color: #7700ff;
+}

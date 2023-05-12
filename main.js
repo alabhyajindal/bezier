@@ -45,7 +45,7 @@ function init() {
   scene.add(group);
 
   // Calling rendering functions
-  // renderBeziers(NUMBER_OF_BEZIER_LINES);
+  renderBeziers(NUMBER_OF_BEZIER_LINES);
   renderNodes(NUMBER_OF_NODES);
 
   controls = new DragControls([...objects], camera, renderer.domElement);
@@ -172,6 +172,10 @@ function onClick(event) {
 }
 
 function randomlyGroupObjects(count) {
+  if (group.children.length > 0) {
+    alert('Please refresh. This is a work in progress.');
+  }
+
   const draggableObjects = controls.getObjects();
   draggableObjects.length = 0;
 

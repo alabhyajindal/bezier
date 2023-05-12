@@ -6,8 +6,6 @@ let controls, group;
 
 let enableSelection = false;
 
-const nodes = [];
-const edges = [];
 const objects = [];
 const NUMBER_OF_BEZIER_LINES = 50;
 const NUMBER_OF_NODES = 30;
@@ -46,7 +44,7 @@ function init() {
   scene.add(group);
 
   // Calling rendering functions
-  // renderBeziers(NUMBER_OF_BEZIER_LINES);
+  renderBeziers(NUMBER_OF_BEZIER_LINES);
   renderNodes(NUMBER_OF_NODES);
 
   controls = new DragControls([...objects], camera, renderer.domElement);
@@ -60,6 +58,7 @@ function init() {
 }
 
 function renderBeziers(count) {
+  const color = 0xadb5bd;
   // Define the control points
   const startPoint = new THREE.Vector3(-10, 0, 0);
   const endPoint = new THREE.Vector3(10, 0, 0);
@@ -67,10 +66,10 @@ function renderBeziers(count) {
   const controlPoint2 = new THREE.Vector3(5, -15, 0);
 
   // Create the material
-  const material = new THREE.LineBasicMaterial({ color: 0x000000 });
 
   // Add 50 curves with different positions to the scene
   for (let i = 0; i < count; i++) {
+    const material = new THREE.LineBasicMaterial({ color });
     // Create a random position for the curve
     const x = THREE.MathUtils.randFloat(-50, 50);
     const y = THREE.MathUtils.randFloat(-50, 50);
@@ -93,11 +92,8 @@ function renderBeziers(count) {
     // Create the mesh and add it to the scene
     const mesh = new THREE.Line(geometry, material);
     scene.add(mesh);
-    edges.push(mesh);
+    objects.push(mesh);
   }
-
-  // controls = new DragControls([...edges], camera, renderer.domElement);
-  // controls.addEventListener('drag', render);
 }
 
 function renderNodes(count) {
@@ -116,12 +112,8 @@ function renderNodes(count) {
     mesh.position.set(x, y, z);
 
     scene.add(mesh);
-    nodes.push(mesh);
     objects.push(mesh);
   }
-
-  // controls = new DragControls([...nodes], camera, renderer.domElement);
-  // controls.addEventListener('drag', render);
 }
 
 function onKeyDown(event) {

@@ -38,11 +38,16 @@ function init() {
   renderer.setSize(width, height);
   document.body.appendChild(renderer.domElement);
 
-  window.addEventListener('keydown', onKeyDown);
-  window.addEventListener('keyup', onKeyUp);
+  group = new THREE.Group();
+  scene.add(group);
 
+  // Calling rendering functions
   // renderBeziers(NUMBER_OF_BEZIER_LINES);
   renderNodes(NUMBER_OF_NODES);
+
+  document.addEventListener('click', onClick);
+  window.addEventListener('keydown', onKeyDown);
+  window.addEventListener('keyup', onKeyUp);
 
   render();
 }
@@ -93,7 +98,7 @@ function renderNodes(count) {
   const material = new THREE.MeshBasicMaterial({ color });
 
   // Create the geometries
-  const geometry = new THREE.PlaneGeometry(30, 10);
+  const geometry = new THREE.PlaneGeometry(20, 5);
 
   for (let i = 0; i < count; i++) {
     const x = Math.floor(Math.random() * 100);
@@ -113,12 +118,16 @@ function renderNodes(count) {
 
 function onKeyDown(event) {
   enableSelection = event.keyCode === 16 ? true : false;
-  console.log(enableSelection);
 }
 
 function onKeyUp() {
   enableSelection = false;
-  console.log(enableSelection);
+}
+
+function onClick(event) {
+  if (enableSelection) {
+    console.log("You already know what's going on");
+  }
 }
 
 function render() {

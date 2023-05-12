@@ -8,8 +8,12 @@ let enableSelection = false;
 
 const nodes = [];
 const edges = [];
+const objects = [];
 const NUMBER_OF_BEZIER_LINES = 50;
 const NUMBER_OF_NODES = 50;
+
+const mouse = new THREE.Vector2(),
+  raycaster = new THREE.Raycaster();
 
 init();
 
@@ -44,6 +48,9 @@ function init() {
   // Calling rendering functions
   // renderBeziers(NUMBER_OF_BEZIER_LINES);
   renderNodes(NUMBER_OF_NODES);
+
+  controls = new DragControls([...objects], camera, renderer.domElement);
+  controls.addEventListener('drag', render);
 
   document.addEventListener('click', onClick);
   window.addEventListener('keydown', onKeyDown);
@@ -89,8 +96,8 @@ function renderBeziers(count) {
     edges.push(mesh);
   }
 
-  controls = new DragControls([...edges], camera, renderer.domElement);
-  controls.addEventListener('drag', render);
+  // controls = new DragControls([...edges], camera, renderer.domElement);
+  // controls.addEventListener('drag', render);
 }
 
 function renderNodes(count) {
@@ -110,10 +117,11 @@ function renderNodes(count) {
 
     scene.add(mesh);
     nodes.push(mesh);
+    objects.push(mesh);
   }
 
-  controls = new DragControls([...nodes], camera, renderer.domElement);
-  controls.addEventListener('drag', render);
+  // controls = new DragControls([...nodes], camera, renderer.domElement);
+  // controls.addEventListener('drag', render);
 }
 
 function onKeyDown(event) {
@@ -125,9 +133,41 @@ function onKeyUp() {
 }
 
 function onClick(event) {
-  if (enableSelection) {
-    console.log("You already know what's going on");
+  event.preventDefault();
+
+  if (enableSelection === true) {
+    const draggableObjects = controls.getObjects();
+    draggableObjects.length = 0;
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    const intersections = raycaster.intersectObjects(objects, true);
+
+    if (intersections.length > 0) {
+      const object = intersections[0].object;
+
+      if (group.children.includes(object) === true) {
+        object.material.color.set(0x000000);
+        scene.attach(object);
+      } else {
+        object.material.color.set(0x7700ff);
+        group.attach(object);
+      }
+
+      controls.transformGroup = true;
+      draggableObjects.push(group);
+    }
+
+    if (group.children.length === 0) {
+      controls.transformGroup = false;
+      draggableObjects.push(...objects);
+    }
   }
+
+  render();
 }
 
 function render() {

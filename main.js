@@ -7,6 +7,7 @@ let controls;
 const nodes = [];
 const edges = [];
 const NUMBER_OF_BEZIER_LINES = 50;
+const NUMBER_OF_NODES = 100;
 
 init();
 
@@ -36,7 +37,7 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   // renderBeziers(NUMBER_OF_BEZIER_LINES);
-  renderTwoNodes();
+  renderNodes(NUMBER_OF_NODES);
 
   render();
 }
@@ -82,26 +83,31 @@ function renderBeziers(count) {
   controls.addEventListener('drag', render);
 }
 
-function renderTwoNodes() {
+function renderNodes(count) {
   const color = 0xadb5bd;
-  // Create the materials
-  const material1 = new THREE.MeshBasicMaterial({ color });
-  const material2 = new THREE.MeshBasicMaterial({ color });
+  const material = new THREE.MeshBasicMaterial({ color });
 
   // Create the geometries
-  const geometry1 = new THREE.PlaneGeometry(30, 10);
-  const geometry2 = new THREE.PlaneGeometry(30, 10);
+  const geometry = new THREE.PlaneGeometry(30, 10);
 
-  // Create the meshes and position them
-  const mesh1 = new THREE.Mesh(geometry1, material1);
-  mesh1.position.set(-15, 25, 0);
-  const mesh2 = new THREE.Mesh(geometry2, material2);
-  mesh2.position.set(-15, 0, 0);
+  for (let i = 0; i < count; i++) {
+    // Create the meshes and position them
+    // const mesh1 = new THREE.Mesh(geometry1, material1);
+    // mesh1.position.set(-15, 25, 0);
+    // const mesh2 = new THREE.Mesh(geometry2, material2);
+    // mesh2.position.set(-15, 0, 0);
 
-  // Add the meshes to the scene
-  scene.add(mesh1);
-  scene.add(mesh2);
-  nodes.push(mesh1, mesh2);
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(
+      Math.floor(Math.random() * -15),
+      Math.floor(Math.random() * 25),
+      0
+    );
+
+    scene.add(mesh);
+    nodes.push(mesh);
+  }
+
   controls = new DragControls([...nodes], camera, renderer.domElement);
   controls.addEventListener('drag', render);
 }

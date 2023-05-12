@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./main.css" />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div id="app">
+      <div id="usage-cont">
+        <p id="usage-header">three.js experimentation</p>
+        <p>
+          <code>shift</code> + click :
+          <span id="usage-action">select/deselect</span>
+        </p>
+        <p><code>shift</code> + drag : <span id="usage-action">drag</span></p>
+        <p><code>r</code>: <span id="usage-action">random select</span></p>
+        <div id="controls">
+          <label
+            >random select object count:
+            <br />
+            <input
+              id="controls-object-count"
+              type="number"
+              min="2"
+              value="42"
+            />
+          </label>
+        </div>
+      </div>
+
+      <div id="sidebar"></div>
+      <canvas id="c"></canvas>
+    </div>
+    <script type="module" src="/main.js"></script>
+    <!-- <script type="module" src="/another_one.js"></script> -->
+  </body>
+</html>

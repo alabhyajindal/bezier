@@ -10,7 +10,7 @@ const nodes = [];
 const edges = [];
 const objects = [];
 const NUMBER_OF_BEZIER_LINES = 50;
-const NUMBER_OF_NODES = 50;
+const NUMBER_OF_NODES = 30;
 
 const mouse = new THREE.Vector2(),
   raycaster = new THREE.Raycaster();
@@ -102,12 +102,12 @@ function renderBeziers(count) {
 
 function renderNodes(count) {
   const color = 0xadb5bd;
-  const material = new THREE.MeshBasicMaterial({ color });
 
   // Create the geometries
   const geometry = new THREE.PlaneGeometry(20, 5);
 
   for (let i = 0; i < count; i++) {
+    const material = new THREE.MeshBasicMaterial({ color });
     const x = Math.floor(Math.random() * 100);
     const y = Math.floor(Math.random() * 100);
     const z = 0;
@@ -150,7 +150,7 @@ function onClick(event) {
       const object = intersections[0].object;
 
       if (group.children.includes(object) === true) {
-        object.material.color.set(0x000000);
+        object.material.color.set(0xadb5bd);
         scene.attach(object);
       } else {
         object.material.color.set(0x7700ff);

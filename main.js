@@ -2,12 +2,14 @@ import * as THREE from 'three';
 import { DragControls } from 'three/addons/controls/DragControls.js';
 
 let camera, scene, renderer;
-let controls;
+let controls, group;
+
+let enableSelection = false;
 
 const nodes = [];
 const edges = [];
 const NUMBER_OF_BEZIER_LINES = 50;
-const NUMBER_OF_NODES = 100;
+const NUMBER_OF_NODES = 50;
 
 init();
 
@@ -35,6 +37,9 @@ function init() {
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(width, height);
   document.body.appendChild(renderer.domElement);
+
+  window.addEventListener('keydown', onKeyDown);
+  window.addEventListener('keyup', onKeyUp);
 
   // renderBeziers(NUMBER_OF_BEZIER_LINES);
   renderNodes(NUMBER_OF_NODES);
@@ -91,18 +96,12 @@ function renderNodes(count) {
   const geometry = new THREE.PlaneGeometry(30, 10);
 
   for (let i = 0; i < count; i++) {
-    // Create the meshes and position them
-    // const mesh1 = new THREE.Mesh(geometry1, material1);
-    // mesh1.position.set(-15, 25, 0);
-    // const mesh2 = new THREE.Mesh(geometry2, material2);
-    // mesh2.position.set(-15, 0, 0);
+    const x = Math.floor(Math.random() * 100);
+    const y = Math.floor(Math.random() * 100);
+    const z = 0;
 
     const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(
-      Math.floor(Math.random() * -15),
-      Math.floor(Math.random() * 25),
-      0
-    );
+    mesh.position.set(x, y, z);
 
     scene.add(mesh);
     nodes.push(mesh);
@@ -110,6 +109,16 @@ function renderNodes(count) {
 
   controls = new DragControls([...nodes], camera, renderer.domElement);
   controls.addEventListener('drag', render);
+}
+
+function onKeyDown(event) {
+  enableSelection = event.keyCode === 16 ? true : false;
+  console.log(enableSelection);
+}
+
+function onKeyUp() {
+  enableSelection = false;
+  console.log(enableSelection);
 }
 
 function render() {
